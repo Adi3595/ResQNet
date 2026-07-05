@@ -1,25 +1,24 @@
 import os
 import asyncio
-from google import genai
-from google.genai import types
+from groq import Groq
 from socket_server.server import broadcast_agent_update
 import mcp_tools
 
 class ResQNetAgent:
-    def __init__(self, name: str, role: str, model: str = "gemini-2.5-flash"):
+    def __init__(self, name: str, role: str, model: str = "llama3-70b-8192"):
         self.name = name
         self.role = role
         self.model = model
         
         # Initialize client here to avoid global init issues if ENV varies
-        api_key = os.getenv("GEMINI_API_KEY")
-        self.client = genai.Client(api_key=api_key) if api_key else None
+        api_key = os.getenv("GROQ_API_KEY")
+        self.client = Groq(api_key=api_key) if api_key else None
 
     async def execute(self, incident_id: int, context: str):
         if not self.client:
             if self.name == "DecisionIntelligenceAgent":
-                mcp_tools.dispatch_emergency_notification("SYSTEM ERROR: GEMINI_API_KEY is missing in the Render environment variables! Add it in the Render Dashboard.", ["ntfy.sh/resqnet_alerts"])
-            await broadcast_agent_update(incident_id, self.name, "ERROR", "GEMINI_API_KEY not configured.")
+                mcp_tools.dispatch_emergency_notification("SYSTEM ERROR: GROQ_API_KEY is missing in the Render environment variables! Add it in the Render Dashboard.", ["ntfy.sh/resqnet_alerts"])
+            await broadcast_agent_update(incident_id, self.name, "ERROR", "GROQ_API_KEY not configured.")
             return "Error: API Key missing."
 
         await broadcast_agent_update(incident_id, self.name, "STARTED", f"Initializing {self.role} protocols...")
@@ -63,16 +62,14 @@ class ResQNetAgent:
             loop = asyncio.get_event_loop()
             response = await loop.run_in_executor(
                 None, 
-                lambda: self.client.models.generate_content(
+                lambda: self.client.chat.completions.create(
                     model=self.model, 
-                    contents=prompt,
-                    config=types.GenerateContentConfig(
-                        temperature=0.2
-                    )
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.2
                 )
             )
             
-            result = response.text
+            result = response.choices[0].message.content
             
             # ⚡ DETERMINISTIC NOTIFICATION DISPATCH ⚡
             if self.name == "DecisionIntelligenceAgent":
