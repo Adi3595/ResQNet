@@ -177,7 +177,7 @@ export default function Dashboard() {
                 >
                   <NavigationControl position="bottom-right" />
                   
-                  {incidents.map(inc => (
+                  {Array.isArray(incidents) && incidents.map(inc => (
                     <Marker key={inc.id} longitude={inc.longitude || inc.lng} latitude={inc.latitude || inc.lat}>
                       <div className="relative flex h-8 w-8 items-center justify-center cursor-pointer group">
                         <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 ${inc.severity === 'Critical' ? 'bg-rescue-red' : 'bg-amber-500'}`}></span>
@@ -231,7 +231,10 @@ export default function Dashboard() {
                         <p className="text-xs text-warm-white leading-relaxed">Dispatch airlift to collapsed bridge on Route 9.</p>
                       </div>
                       <div className="bg-zinc-800 p-2 rounded border border-zinc-700">
-                        <span className="text-xs font-bold text-amber-500 block mb-1">Priority 2</span>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-xs font-bold text-amber-500">Priority 2</span>
+                          <span className="text-[10px] bg-amber-500/20 text-amber-500 px-1.5 py-0.5 rounded font-bold">{Array.isArray(incidents) ? incidents.length : 0} Active</span>
+                        </div>
                         <p className="text-xs text-warm-white leading-relaxed">Route 500 water rations to Shelter 12.</p>
                       </div>
                       <div className="bg-zinc-800 p-2 rounded border border-zinc-700">
