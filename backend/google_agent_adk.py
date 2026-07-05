@@ -5,7 +5,7 @@ from socket_server.server import broadcast_agent_update
 import mcp_tools
 
 class ResQNetAgent:
-    def __init__(self, name: str, role: str, model: str = "llama3-70b-8192"):
+    def __init__(self, name: str, role: str, model: str = "llama-3.3-70b-versatile"):
         self.name = name
         self.role = role
         self.model = model
