@@ -2,7 +2,8 @@ import socketio
 
 # Create a Socket.IO server
 # async_mode='asgi' is needed for FastAPI
-sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
+# cors_allowed_origins=[] prevents duplicate CORS headers because FastAPI's CORSMiddleware handles it
+sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins=[])
 
 # Wrap with ASGI application
 socket_app = socketio.ASGIApp(sio)
