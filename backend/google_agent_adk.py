@@ -54,7 +54,7 @@ class ResQNetAgent:
         except Exception as e:
             pass
             
-        prompt = f"You are the {self.name} for ResQNet. Your role is: {self.role}.\n\nCurrent Context: {safe_context}{api_data}\n\nProvide a brief, tactical assessment (max 3 sentences) of the situation based on your specific role."
+        prompt = f"You are the {self.name} for ResQNet. Your role is: {self.role}.\n\nCurrent Context: {safe_context}{api_data}\n\nProvide a brief, tactical assessment (max 3 sentences) of the situation based on your specific role. IMPORTANT: If you received [LIVE API DATA] in your context, you MUST explicitly quote the raw data/numbers in your response so the Commander can see the real-world telemetry!"
         
         await broadcast_agent_update(incident_id, self.name, "PROCESSING", "Analyzing neural telemetry...")
         
