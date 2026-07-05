@@ -118,17 +118,19 @@ def analyze_satellite_imagery(lat: float, lng: float) -> dict:
 def dispatch_emergency_notification(message: str, channels: list[str]) -> dict:
     """Real Push Notification MCP Tool using ntfy.sh"""
     try:
-        # Send a real push notification to ntfy.sh/resqnet_alerts
-        # Anyone subscribed to this URL will get a push notification on their phone/browser!
+        import urllib.request
         url = "https://ntfy.sh/resqnet_alerts"
-        response = httpx.post(url, data=message.encode('utf-8'), timeout=5.0)
-        if response.status_code == 200:
-            return {
-                "status": "success",
-                "dispatched_to": url,
-                "message_sent": message,
-                "source": "Live ntfy.sh Push Notification Engine"
-            }
+        req = urllib.request.Request(url, data=message.encode('utf-8'), method="POST")
+        req.add_header('User-Agent', 'ResQNet-AI-Swarm/1.0')
+        
+        with urllib.request.urlopen(req, timeout=5.0) as response:
+            if response.status == 200:
+                return {
+                    "status": "success",
+                    "dispatched_to": url,
+                    "message_sent": message,
+                    "source": "Live ntfy.sh Push Notification Engine"
+                }
     except Exception as e:
         logger.error(f"ntfy.sh Error: {e}")
         
