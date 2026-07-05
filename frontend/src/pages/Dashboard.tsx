@@ -206,7 +206,7 @@ export default function Dashboard() {
                 className="flex-1 relative"
               >
                 <Map
-                  initialViewState={{ longitude: -98.5795, latitude: 39.8283, zoom: 4 }}
+                  initialViewState={{ longitude: -80.1918, latitude: 25.7617, zoom: 11 }}
                   mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
                 >
                   <NavigationControl position="bottom-right" />
