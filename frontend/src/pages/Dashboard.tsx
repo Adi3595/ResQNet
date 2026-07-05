@@ -85,7 +85,7 @@ export default function Dashboard() {
                 }
               });
             }}
-            className="flex items-center space-x-2 text-sm font-bold bg-rescue-red/10 text-rescue-red hover:bg-rescue-red/20 px-4 py-1.5 rounded border border-rescue-red/30 transition-colors cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.2)]"
+            className="flex items-center space-x-2 text-sm font-bold bg-rescue-red/10 text-rescue-red hover:bg-rescue-red/20 px-4 py-1.5 rounded border border-rescue-red/30 transition-colors cursor-pointer neon-glow-red"
           >
             <Zap className="w-4 h-4" />
             <span>SIMULATE DISASTER</span>

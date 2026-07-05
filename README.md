@@ -1,137 +1,87 @@
-# 🌍 ResQNet – Multi-Agent Disaster Response Command Center
+# 🌍 ResQNet – Google ADK Multi-Agent Disaster Response Command Center
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Status-Active-brightgreen" alt="Status Active" />
+  <img src="https://img.shields.io/badge/Status-Live_Prototype-brightgreen" alt="Status Active" />
   <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python" alt="Python 3.11" />
   <img src="https://img.shields.io/badge/React-18-blue?logo=react" alt="React 18" />
   <img src="https://img.shields.io/badge/FastAPI-0.104-009688?logo=fastapi" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker" alt="Docker" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License MIT" />
+  <img src="https://img.shields.io/badge/Google_Gemini-2.5_Flash-4285F4?logo=google" alt="Google Gemini" />
+  <img src="https://img.shields.io/badge/Render-Deployed-000000?logo=render" alt="Render" />
 </div>
 
 <br />
 
-> **ResQNet** is an advanced, fully functional AI-powered emergency response platform designed to coordinate rescue operations during disasters such as earthquakes, floods, hurricanes, wildfires, landslides, and tsunamis. Built for the **Kaggle Google Agents Hackathon**.
+> **ResQNet** is a fully functional, autonomous AI-powered emergency response platform built for the **Kaggle Google Agents Hackathon**. It uses a highly-optimized 12-Agent Neural Swarm to coordinate rescue operations, route ambulances, track weather, and dispatch notifications in real-time.
 
 ---
 
-<details>
-<summary><b>✨ View Architecture Diagram</b></summary>
+<details open>
+<summary><b>✨ View Swarm Architecture Diagram</b></summary>
 <br/>
 
 ```mermaid
 graph TD
-    User([User / Operator]) --> |WebSockets / HTTP| Frontend[React + Vite Frontend]
+    User([Dashboard Operator]) --> |HTTPS / WSS| Frontend[React + Vite Command Center]
     Frontend --> |REST / Socket.io| Backend[FastAPI Backend]
     
-    Backend --> |Task Delegation| Celery[Celery Task Queue]
-    Backend --> |Store Data| DB[(PostgreSQL)]
-    Backend <--> |Pub/Sub| Redis[(Redis Cache)]
+    Backend --> |asyncio Task Queue| Commander[Commander Agent]
     
-    Celery --> |Triggers| Commander[Commander Agent]
-    
-    subgraph Google ADK Agent Swarm
-        Commander --> WeatherA[Weather Agent]
-        Commander --> MedicalA[Medical Agent]
-        Commander --> RoadA[Road Agent]
-        Commander --> ShelterA[Shelter Agent]
-        Commander --> DecisionA[Decision Agent]
+    subgraph 🧠 Google Gemini AI Swarm
+        Commander --> Layer1[Assessors: Satellite, Weather, Infrastructure, Social Media, Risk]
+        Layer1 --> Layer2[Responders: Road, Shelter, Medical, Volunteer]
+        Layer2 --> Layer3[Logistics: Supply Chain]
+        Layer3 --> Decision[Final Node: Decision Intelligence]
     end
     
-    WeatherA --> MCP[MCP Servers / Context Tools]
-    MedicalA --> MCP
-    RoadA --> MCP
+    Layer1 --> MCP[Live Real-World APIs]
+    Layer2 --> MCP
+    
+    subgraph 🌍 MCP Real-World Data Integrations
+        MCP -.-> |Live Weather| OpenMeteo[Open-Meteo API]
+        MCP -.-> |Live Routing| OSRM[OSRM Driving Routes]
+        MCP -.-> |Terrain/Flood Risk| Altimetry[Open-Meteo Elevation]
+        MCP -.-> |Historical Database| ReliefWeb[UN ReliefWeb API]
+        MCP -.-> |Push Notifications| NTFY[ntfy.sh Webhooks]
+    end
 ```
 </details>
 
 <details open>
-<summary><b>🚀 Core Features</b></summary>
+<summary><b>🚀 Why ResQNet is Unique (Core Features)</b></summary>
 <br/>
 
-- 🧠 **Google ADK Multi-Agent System:** 12 specialized agents (Commander, Weather, Medical, Logistics, Shelter, etc.) running autonomously to resolve crisis scenarios.
-- ⚡ **FastAPI Backend:** Secure (JWT, RBAC), real-time (WebSockets), and asynchronous (Celery, Redis) architecture.
-- 🎨 **React Frontend:** Modern, glassmorphism-inspired UI with interactive maps (Leaflet), real-time agent tracking, and a full simulation suite.
-- 🔌 **MCP Servers:** Integrated tool servers providing context for weather, map routing, and database interactions.
-- 🐳 **Docker Compose:** One-command deployment.
+- 🧠 **12-Agent Waterfall Delegation:** Unlike chat-bots, ResQNet runs 12 highly specialized Gemini Agents autonomously in an `asyncio` parallel waterfall. The *Assessors* gather intelligence, the *Responders* build the rescue plan, and the *Logistics* agent secures the supply chain without stepping on each other's toes.
+- 🌍 **100% Live Real-World Data (No Mocks!):** Through Google's Native Function Calling (MCP logic), the agents dynamically connect to Live HTTP APIs. When a hurricane strikes, the agents fetch *actual* windspeeds from **Open-Meteo**, route ambulances using live **OSRM**, and research historical precedents using the **United Nations ReliefWeb API**.
+- ⚡ **Blazing Fast Architecture:** We ripped out heavy message brokers (like Celery) in favor of FastAPI's native background tasks to ensure the 12-agent swarm can execute and stream live websocket updates instantly on free-tier infrastructure.
+- 📱 **Real-Time Push Notifications:** The Communications Agent executes real HTTP POST requests to `ntfy.sh` to send live push notifications directly to civilians (and hackathon judges!)
+- 🎨 **NASA Command Center UI:** A stunning, CRT-scanline infused dark-mode dashboard built in React that tracks the "Decision Pathway" of the swarm in real-time.
 </details>
 
 ---
 
-## 💻 Quick Start & Installation
+## 💻 Try the Live Prototype!
 
-<details>
-<summary><b>View Installation Steps</b></summary>
-<br/>
+**Frontend Dashboard**: [https://res-q-net-phi.vercel.app](https://res-q-net-phi.vercel.app)
 
-### Prerequisites
-- [Docker](https://www.docker.com/) & Docker Compose
-- Google Gemini API Key
-
-### Steps
-
-1. **Clone the repository**
-   ```bash
-   git clone <repo-url>
-   cd ResQNet
-   ```
-
-2. **Configure Environment Variables**
-   Create a `.env` file in the root directory:
-   ```env
-   GEMINI_API_KEY=your-gemini-api-key
-   SECRET_KEY=your-secure-secret-key
-   ```
-
-3. **Start the Platform**
-   ```bash
-   docker-compose up --build
-   ```
-
-4. **Access the System**
-   - 🖥️ **Frontend Dashboard**: `http://localhost:5173`
-   - 📖 **Backend API Docs (Swagger)**: `http://localhost:8000/docs`
-</details>
+1. Open the Dashboard link above.
+2. Click the glowing red **SIMULATE DISASTER** button in the top right corner.
+3. Keep your eyes on the **Decision Pathway** terminal on the right. You will see the 12 AI Agents wake up in parallel, connect to real-world APIs, and formulate a tactical rescue plan live on screen!
+4. Check out [ntfy.sh/resqnet_alerts](https://ntfy.sh/resqnet_alerts) to see the live push notifications dispatched by the AI!
 
 ---
 
 <details>
-<summary><b>🤖 Agent Roster & Responsibilities</b></summary>
+<summary><b>🤖 The 12-Agent Roster</b></summary>
 <br/>
 
-| Agent Name | Role | Responsibility |
+| Agent Name | Role & Responsibility | Live API Integration |
 |---|---|---|
-| **Commander Agent** | 🎯 Coordinator | Delegates tasks and resolves conflicts between other agents. |
-| **Weather Agent** | 🌪️ Risk Predictor | Analyzes storm patterns and predicts flood/lightning danger. |
-| **Medical Agent** | 🏥 Medical Officer | Tracks hospital beds, ICUs, and triage. |
-| **Road Agent** | 🛣️ Logistics | Maps evacuation routes and avoids blocked roads. |
-| **Shelter Agent** | ⛺ Evacuation | Finds and manages available shelters for displaced citizens. |
-| **Decision Agent** | 🧠 Final Strategist | Synthesizes all reports into a priority ranking and timeline. |
-</details>
-
-<details>
-<summary><b>🔒 Security Features</b></summary>
-<br/>
-
-- 🔐 **Authentication**: JWT Based Authentication protecting all endpoints.
-- 👮‍♂️ **RBAC**: Strict role enforcement (`Admin`, `Operator`, `Citizen`).
-- 🛡️ **Encryption**: Passwords hashed securely using `bcrypt`.
-</details>
-
-<details>
-<summary><b>🧪 Testing</b></summary>
-<br/>
-
-Run unit tests directly inside the backend container to verify the API and agents:
-```bash
-docker exec -it resqnet-backend pytest
-```
-</details>
-
-<details>
-<summary><b>📄 License</b></summary>
-<br/>
-
-This project is licensed under the [MIT License](LICENSE).
+| **Commander Agent** | 🎯 Parses the raw incident report and delegates tasks. | None (Coordinator) |
+| **Weather Agent** | 🌪️ Analyzes storm patterns and predicts danger. | `api.open-meteo.com/v1/forecast` |
+| **Satellite Agent** | 🛰️ Calculates flood risk based on terrain height. | `api.open-meteo.com/v1/elevation` |
+| **Road Agent** | 🛣️ Maps evacuation routes avoiding blocked roads. | `router.project-osrm.org` |
+| **Decision Agent** | 🧠 Synthesizes all data and dispatches push alerts. | `ntfy.sh/resqnet_alerts` |
+| *(And 7 more...)* | Infrastructure, Social Media, Shelter, Medical, etc. | UN ReliefWeb |
 </details>
 
 ---
