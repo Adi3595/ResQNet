@@ -19,7 +19,8 @@ export const AgentChat = () => {
 
   useEffect(() => {
     // Connect to FastAPI Socket.IO server
-    socketRef.current = io('http://localhost:8000', {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    socketRef.current = io(apiUrl, {
       path: '/socket.io'
     });
 

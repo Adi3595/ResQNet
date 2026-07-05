@@ -26,7 +26,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     setLoading(true);
-    fetch('http://localhost:8000/api/incidents/')
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    fetch(`${apiUrl}/api/incidents/`)
       .then(res => {
         if (!res.ok) throw new Error("Telemetry Feed Disconnected");
         return res.json();
