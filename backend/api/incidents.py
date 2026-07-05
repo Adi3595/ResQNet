@@ -1,17 +1,27 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 from typing import List
 from database.db import get_db
 from database.models import Incident
 from schemas import IncidentCreate, IncidentResponse
 from auth.deps import get_current_user
-# from core.celery_app import process_incident_task
+from google_agent_adk import SwarmOrchestrator
+import asyncio
 
 router = APIRouter()
+
+def run_swarm_in_background(incident_id: int, description: str):
+    # This runs in a background thread, so we create a new event loop for the async orchestrator
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    orchestrator = SwarmOrchestrator()
+    loop.run_until_complete(orchestrator.process_incident(incident_id, description))
+    loop.close()
 
 @router.post("/", response_model=IncidentResponse)
 def create_incident(
     incident_in: IncidentCreate, 
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db), 
     current_user = Depends(get_current_user)
 ):
@@ -20,8 +30,12 @@ def create_incident(
     db.commit()
     db.refresh(incident)
     
-    # Trigger Celery Task to process the incident using Agents
-    # process_incident_task.delay(incident.id)
+    # Trigger the Multi-Agent Swarm Orchestrator
+    background_tasks.add_task(
+        run_swarm_in_background, 
+        incident.id, 
+        f"{incident.type} at Lat: {incident.latitude}, Lng: {incident.longitude}. Severity: {incident.severity}. Details: {incident.description}"
+    )
     
     return incident
 
