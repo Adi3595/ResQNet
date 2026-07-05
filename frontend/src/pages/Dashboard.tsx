@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { GlassPanel } from '../components/ui/GlassPanel';
-import { ShieldAlert, Activity, HeartPulse, Building2, Cross, Waves, Network, Flame, Droplets, ListOrdered } from 'lucide-react';
+import { ShieldAlert, Activity, HeartPulse, Building2, Cross, Waves, Network, Flame, Droplets, ListOrdered, Satellite, ShieldCheck, Map as MapIcon, Users, Package, MessageSquare, AlertTriangle, Zap, Cpu } from 'lucide-react';
 import { AgentChat } from '../components/AgentChat';
 
 const ACTIVE_INCIDENTS = [
@@ -77,11 +77,20 @@ export default function Dashboard() {
           
           {/* Agent Roster */}
           <div className="mt-auto px-4 hidden lg:block w-full">
-            <div className="text-xs font-semibold text-steel-gray uppercase tracking-wider mb-4 px-2">Deployed Agents</div>
-            <div className="space-y-3 bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-sm">
-              <div className="flex items-center text-sm font-medium text-warm-white"><Waves className="w-4 h-4 mr-3 text-teal-500" /> Weather AI</div>
-              <div className="flex items-center text-sm font-medium text-warm-white"><Cross className="w-4 h-4 mr-3 text-rescue-red" /> Medical AI</div>
-              <div className="flex items-center text-sm font-medium text-warm-white"><Building2 className="w-4 h-4 mr-3 text-amber-500" /> Infra AI</div>
+            <div className="text-xs font-semibold text-steel-gray uppercase tracking-wider mb-4 px-2">12-Agent Swarm</div>
+            <div className="space-y-2.5 bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-sm max-h-[40vh] overflow-y-auto custom-scrollbar">
+              <div className="flex items-center text-xs font-medium text-warm-white"><Cpu className="w-3.5 h-3.5 mr-3 text-indigo-400" /> Commander Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><Satellite className="w-3.5 h-3.5 mr-3 text-teal-500" /> Satellite Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><Waves className="w-3.5 h-3.5 mr-3 text-teal-400" /> Weather Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><Zap className="w-3.5 h-3.5 mr-3 text-amber-400" /> Infrastructure Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><MapIcon className="w-3.5 h-3.5 mr-3 text-steel-gray" /> Road Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><Building2 className="w-3.5 h-3.5 mr-3 text-amber-500" /> Shelter Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><Cross className="w-3.5 h-3.5 mr-3 text-rescue-red" /> Medical Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><Users className="w-3.5 h-3.5 mr-3 text-indigo-300" /> Volunteer Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><Package className="w-3.5 h-3.5 mr-3 text-amber-600" /> Supply Chain Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><MessageSquare className="w-3.5 h-3.5 mr-3 text-teal-300" /> Social Media Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><AlertTriangle className="w-3.5 h-3.5 mr-3 text-rescue-red" /> Risk Prediction Agent</div>
+              <div className="flex items-center text-xs font-medium text-warm-white"><Activity className="w-3.5 h-3.5 mr-3 text-teal-500" /> Decision Intel Agent</div>
             </div>
           </div>
         </motion.div>

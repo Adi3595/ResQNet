@@ -126,7 +126,7 @@ export default function LandingPage({ onLaunch }: { onLaunch: () => void }) {
           <GlassPanel className="col-span-1 md:col-span-2 md:row-span-2 flex flex-col justify-end p-10 min-h-[400px] bg-gradient-to-br from-zinc-900 to-slate-900">
             <Network className="w-10 h-10 text-teal-500 mb-6" />
             <h3 className="text-2xl font-display font-bold mb-3">12-Agent Neural Swarm</h3>
-            <p className="text-steel-gray text-lg max-w-md">Dedicated AI agents for Weather, Medical, Routing, and Infrastructure collaborate instantly to formulate comprehensive rescue strategies.</p>
+            <p className="text-steel-gray text-lg max-w-md">Led by a Commander Agent, a swarm of 12 specialized models (including Supply Chain, Social Media, and Risk Prediction) collaborate instantly to formulate comprehensive rescue strategies.</p>
           </GlassPanel>
 
           {/* Card 2 */}
@@ -147,15 +147,15 @@ export default function LandingPage({ onLaunch }: { onLaunch: () => void }) {
           <GlassPanel className="col-span-1 min-h-[200px]">
             <ShieldCheck className="w-8 h-8 text-teal-400 mb-4" />
             <h3 className="text-xl font-display font-bold mb-2">Enterprise Security</h3>
-            <p className="text-steel-gray text-sm">Role-based access and end-to-end encrypted mission logs.</p>
+            <p className="text-steel-gray text-sm">Role-based access, automated PII data masking, and strict API audit logging.</p>
           </GlassPanel>
 
           {/* Card 5 */}
           <GlassPanel className="col-span-1 md:col-span-2 min-h-[200px] flex items-center">
             <div className="flex-1">
               <Zap className="w-8 h-8 text-teal-500 mb-4" />
-              <h3 className="text-xl font-display font-bold mb-2">Instant WebSocket Streaming</h3>
-              <p className="text-steel-gray text-sm max-w-sm">Watch the AI reason in real-time. No loading spinners, just instantaneous tactical feedback.</p>
+              <h3 className="text-xl font-display font-bold mb-2">MCP Server Plugin Architecture</h3>
+              <p className="text-steel-gray text-sm max-w-sm">Built on Model Context Protocol. Agents seamlessly invoke external APIs for Live Routing, Weather Data, and Hospital Database Queries.</p>
             </div>
           </GlassPanel>
         </div>
