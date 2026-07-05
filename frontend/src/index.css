@@ -1,40 +1,44 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Space Grotesk", sans-serif;
-  --font-display: "Orbitron", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-display: "IBM Plex Sans", sans-serif;
   
-  /* Modern Blue Theme */
-  --color-space-950: #020617;
-  --color-space-900: #0f172a;
-  --color-space-800: #1e293b;
-  --color-sky-blue: #38BDF8;
-  --color-pastel-blue: #BFDBFE;
-  --color-pastel-yellow: #FEF08A;
+  /* Humanitarian Professional Theme */
+  --color-navy-950: #050B14;
+  --color-navy-900: #0A1128;
+  --color-storm-800: #1C2A43;
+  --color-storm-700: #2C3E5D;
+  
+  --color-emergency-orange: #FF6B35;
+  --color-rescue-red: #E63946;
+  --color-medical-cyan: #00B4D8;
+  --color-steel-gray: #64748B;
+  --color-warm-white: #F8F9FA;
 }
 
 @layer utilities {
-  .glass-panel {
-    @apply bg-space-900/50 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
+  .solid-panel {
+    @apply bg-storm-800 border border-storm-700 shadow-md;
   }
-  .glass-border-glow {
-    @apply border border-sky-blue/40 shadow-[0_0_15px_rgba(56,189,248,0.2)];
+  .card-border {
+    @apply border border-storm-700/50 shadow-sm rounded-lg bg-navy-900/80 backdrop-blur-md;
   }
-  .text-glow {
-    text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  .status-active {
+    @apply border border-emergency-orange text-emergency-orange bg-emergency-orange/10;
   }
-  .text-glow-yellow {
-    text-shadow: 0 0 10px rgba(254, 240, 138, 0.5);
+  .status-medical {
+    @apply border border-medical-cyan text-medical-cyan bg-medical-cyan/10;
   }
 }
 
 body {
-  @apply bg-space-950 text-gray-200 antialiased selection:bg-sky-blue/30 selection:text-white;
+  @apply bg-navy-950 text-warm-white antialiased selection:bg-medical-cyan/30 selection:text-white;
   margin: 0;
   overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Professional */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -43,8 +47,8 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-space-800 rounded-full border border-white/5;
+  @apply bg-storm-700 rounded-full border border-navy-950;
 }
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-sky-blue/50;
+  @apply bg-steel-gray;
 }

@@ -18,19 +18,18 @@ export const GlassPanel: React.FC<GlassPanelProps> = ({ children, className, glo
   return (
     <motion.div
       className={cn(
-        'glass-panel rounded-2xl p-6 relative overflow-hidden',
-        glow && 'glass-border-glow',
+        'card-border p-6 relative overflow-hidden transition-colors',
+        glow && 'border-medical-cyan/30 shadow-[0_0_15px_rgba(0,180,216,0.1)]',
         className
       )}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       {...props}
     >
-      {/* Subtle top reflection */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      {/* Subtle top reflection for depth, less aggressive than glass */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-warm-white/10 to-transparent" />
       {children}
     </motion.div>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrainCircuit, Loader2 } from 'lucide-react';
+import { Network, Loader2, CheckCircle2 } from 'lucide-react';
 
 type Message = {
   id: string;
@@ -10,7 +10,7 @@ type Message = {
   timestamp: string;
 };
 
-// Simulated mock stream for visual demo
+// Operational mock stream
 const mockStream = [
   { agent: 'WeatherAgent', status: 'STARTED', details: 'Connecting to NOAA Satellite MCP...', time: 2000 },
   { agent: 'WeatherAgent', status: 'PROCESSING', details: 'Analyzing cyclonic pressure drops over sector 7G.', time: 4000 },
@@ -21,7 +21,7 @@ const mockStream = [
 
 export const AgentChat = () => {
   const [messages, setMessages] = useState<Message[]>([
-    { id: '0', agent: 'System', status: 'STARTED', details: 'Initializing neural link...', timestamp: new Date().toLocaleTimeString() }
+    { id: '0', agent: 'System', status: 'STARTED', details: 'Initializing operational link...', timestamp: new Date().toLocaleTimeString() }
   ]);
 
   useEffect(() => {
@@ -42,54 +42,53 @@ export const AgentChat = () => {
   }, []);
 
   const getAgentColor = (agent: string) => {
-    if (agent === 'WeatherAgent') return 'text-sky-blue border-sky-blue';
-    if (agent === 'CommanderAgent') return 'text-pastel-yellow border-pastel-yellow';
-    if (agent === 'RoadAgent') return 'text-pastel-blue border-pastel-blue';
-    return 'text-gray-400 border-gray-600';
+    if (agent === 'WeatherAgent') return 'bg-medical-cyan/10 border-medical-cyan text-medical-cyan';
+    if (agent === 'CommanderAgent') return 'bg-emergency-orange/10 border-emergency-orange text-emergency-orange';
+    if (agent === 'RoadAgent') return 'bg-rescue-red/10 border-rescue-red text-rescue-red';
+    return 'bg-storm-700/50 border-steel-gray text-warm-white';
   };
 
   return (
-    <div className="flex flex-col h-full bg-space-950/50 overflow-hidden font-sans relative">
-      {/* Tech Overlay Lines */}
-      <div className="absolute inset-0 pointer-events-none border border-white/5 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+    <div className="flex flex-col h-full bg-navy-950 overflow-hidden font-sans border-l border-storm-700 relative">
       
-      <div className="p-4 border-b border-white/10 bg-space-900 flex justify-between items-center z-10">
-        <h3 className="font-display font-bold text-sm tracking-widest text-sky-blue flex items-center">
-          <BrainCircuit className="w-4 h-4 mr-2" />
-          LIVE TELEMETRY
+      <div className="p-4 border-b border-storm-700 bg-navy-900 flex justify-between items-center z-10">
+        <h3 className="font-display font-semibold text-sm tracking-wide text-warm-white flex items-center">
+          <Network className="w-4 h-4 mr-2 text-medical-cyan" />
+          Decision Pathway
         </h3>
-        <span className="flex items-center space-x-2">
+        <span className="flex items-center space-x-2 bg-green-900/20 px-2 py-1 rounded">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          <span className="text-[10px] font-bold text-green-500 uppercase tracking-widest">Connected</span>
+          <span className="text-[10px] font-medium text-green-400 uppercase tracking-wide">Live</span>
         </span>
       </div>
       
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 z-10">
+      <div className="flex-1 overflow-y-auto p-6 space-y-4 z-10 bg-navy-950">
         <AnimatePresence>
           {messages.map(msg => (
             <motion.div 
               key={msg.id} 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className={`flex flex-col p-4 rounded-r-lg border-l-2 bg-space-900/50 backdrop-blur-sm shadow-lg ${getAgentColor(msg.agent)}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`flex flex-col p-4 rounded border-l-4 shadow-sm bg-storm-800 ${getAgentColor(msg.agent)}`}
             >
-              <div className="flex justify-between items-start mb-3">
-                <span className="font-display font-bold text-sm tracking-wider uppercase">{msg.agent}</span>
-                <span className="text-xs text-gray-500 font-mono">{msg.timestamp}</span>
+              <div className="flex justify-between items-start mb-2">
+                <span className="font-display font-semibold text-sm">{msg.agent}</span>
+                <span className="text-xs text-steel-gray">{msg.timestamp}</span>
               </div>
               <div className="flex items-center space-x-2 mb-2">
-                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-widest
-                  ${msg.status === 'COMPLETED' ? 'bg-green-500/20 text-green-400 border border-green-500/50' : 
-                    msg.status === 'PROCESSING' ? 'bg-pastel-yellow/20 text-pastel-yellow border border-pastel-yellow/50 flex items-center' : 
-                    'bg-space-800 text-gray-400 border border-gray-700'}`}>
+                <span className={`text-[10px] font-medium px-2 py-0.5 rounded flex items-center
+                  ${msg.status === 'COMPLETED' ? 'bg-green-500/20 text-green-400' : 
+                    msg.status === 'PROCESSING' ? 'bg-emergency-orange/20 text-emergency-orange' : 
+                    'bg-storm-700 text-warm-white'}`}>
                   {msg.status === 'PROCESSING' && <Loader2 className="w-3 h-3 animate-spin mr-1 inline" />}
+                  {msg.status === 'COMPLETED' && <CheckCircle2 className="w-3 h-3 mr-1 inline" />}
                   {msg.status}
                 </span>
               </div>
-              <p className="text-gray-300 text-sm font-light leading-relaxed">{msg.details}</p>
+              <p className="text-warm-white text-sm font-light leading-relaxed opacity-90">{msg.details}</p>
             </motion.div>
           ))}
         </AnimatePresence>
