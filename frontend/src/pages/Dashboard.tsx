@@ -72,7 +72,10 @@ export default function Dashboard() {
                   longitude: -80.1918,
                   status: 'Active'
                 })
-              }).then(() => window.location.reload());
+              }).then(res => res.json())
+                .then(newIncident => {
+                  setIncidents(prev => [...prev, newIncident]);
+                });
             }}
             className="flex items-center space-x-2 text-sm font-bold bg-rescue-red/10 text-rescue-red hover:bg-rescue-red/20 px-4 py-1.5 rounded border border-rescue-red/30 transition-colors cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.2)]"
           >
