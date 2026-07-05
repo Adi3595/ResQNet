@@ -10,12 +10,12 @@ import asyncio
 
 router = APIRouter()
 
-def run_swarm_in_background(incident_id: int, description: str):
+def run_swarm_in_background(incident_id: int, description: str, lat: float, lng: float, incident_type: str):
     # This runs in a background thread, so we create a new event loop for the async orchestrator
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     orchestrator = SwarmOrchestrator()
-    loop.run_until_complete(orchestrator.process_incident(incident_id, description))
+    loop.run_until_complete(orchestrator.process_incident(incident_id, description, lat, lng, incident_type))
     loop.close()
 
 @router.post("/", response_model=IncidentResponse)
@@ -33,7 +33,10 @@ def create_incident(
     background_tasks.add_task(
         run_swarm_in_background, 
         incident.id, 
-        f"{incident.type} at Lat: {incident.latitude}, Lng: {incident.longitude}. Severity: {incident.severity}. Details: {incident.description}"
+        f"{incident.type} at Lat: {incident.latitude}, Lng: {incident.longitude}. Severity: {incident.severity}. Details: {incident.description}",
+        incident.latitude,
+        incident.longitude,
+        incident.type
     )
     
     return incident
