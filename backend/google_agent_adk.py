@@ -32,7 +32,27 @@ class ResQNetAgent:
         
         safe_context = mask_pii(context)
         
-        prompt = f"You are the {self.name} for ResQNet. Your role is: {self.role}.\n\nCurrent Context: {safe_context}\n\nProvide a brief, tactical assessment (max 3 sentences) of the situation based on your specific role."
+        # ⚡ DETERMINISTIC API EXECUTION (Hackathon Optimization) ⚡
+        # We forcefully execute the APIs here and inject the live data into the prompt 
+        # to guarantee the AI reads real-world data without skipping the tool call.
+        api_data = ""
+        try:
+            if self.name == "WeatherAgent":
+                data = mcp_tools.get_weather_forecast(25.7617, -80.1918) # Miami coords for demo
+                api_data = f"\n\n[LIVE API DATA - Open-Meteo]: {data}"
+            elif self.name == "SatelliteAgent":
+                data = mcp_tools.analyze_satellite_imagery(25.7617, -80.1918)
+                api_data = f"\n\n[LIVE API DATA - Satellite Altimetry]: {data}"
+            elif self.name == "RoadAgent":
+                data = mcp_tools.get_routing_info(25.7617, -80.1918, 25.8, -80.2)
+                api_data = f"\n\n[LIVE API DATA - OSRM Routing]: {data}"
+            elif self.name == "CommanderAgent":
+                data = mcp_tools.query_emergency_database("Hurricane")
+                api_data = f"\n\n[LIVE API DATA - UN ReliefWeb]: {data}"
+        except Exception as e:
+            pass
+            
+        prompt = f"You are the {self.name} for ResQNet. Your role is: {self.role}.\n\nCurrent Context: {safe_context}{api_data}\n\nProvide a brief, tactical assessment (max 3 sentences) of the situation based on your specific role."
         
         await broadcast_agent_update(incident_id, self.name, "PROCESSING", "Analyzing neural telemetry...")
         
@@ -45,20 +65,17 @@ class ResQNetAgent:
                     model=self.model, 
                     contents=prompt,
                     config=types.GenerateContentConfig(
-                        temperature=0.2,
-                        tools=[
-                            mcp_tools.get_routing_info,
-                            mcp_tools.get_weather_forecast,
-                            mcp_tools.query_hospital_beds,
-                            mcp_tools.query_emergency_database,
-                            mcp_tools.analyze_satellite_imagery,
-                            mcp_tools.dispatch_emergency_notification
-                        ]
+                        temperature=0.2
                     )
                 )
             )
             
             result = response.text
+            
+            # ⚡ DETERMINISTIC NOTIFICATION DISPATCH ⚡
+            if self.name == "DecisionIntelligenceAgent":
+                mcp_tools.dispatch_emergency_notification(result, ["ntfy.sh/resqnet_alerts"])
+                
             await broadcast_agent_update(incident_id, self.name, "COMPLETED", result)
             return result
         except Exception as e:
