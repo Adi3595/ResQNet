@@ -19,7 +19,7 @@ celery_app.conf.update(
 )
 
 import asyncio
-from websockets.server import broadcast_agent_update
+from socket_server.server import broadcast_agent_update
 import sys
 import os
 

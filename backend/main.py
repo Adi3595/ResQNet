@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import models
 from database.db import engine
 from api import auth, incidents, resources
-from websockets.server import socket_app
+from socket_server.server import socket_app
 
 # Create database tables (using Alembic is preferred in prod, but this is a fallback)
 models.Base.metadata.create_all(bind=engine)
