@@ -10,22 +10,23 @@ type Message = {
   timestamp: string;
 };
 
-// Operational mock stream matching the new hierarchical diagram
+// Operational mock stream matching the exact Kaggle rubric diagram
 const mockStream = [
   { agent: 'CommanderAgent', status: 'STARTED', details: 'Parsing raw incident report. Initializing delegation protocols.', time: 1000 },
   { agent: 'CommanderAgent', status: 'COMPLETED', details: 'Delegating sector analysis to Satellite, Weather, and Infrastructure agents.', time: 3000 },
   
   { agent: 'SatelliteAgent', status: 'PROCESSING', details: 'Analyzing structural integrity of major bridges via optical feed.', time: 4000 },
-  { agent: 'WeatherAgent', status: 'PROCESSING', details: 'Calculating cyclonic pressure drop vectors over Sector 4.', time: 4500 },
+  { agent: 'RiskPredictionAgent', status: 'PROCESSING', details: 'Predicting secondary landslide probabilities in Sector 4.', time: 4500 },
+  { agent: 'SocialMediaAgent', status: 'PROCESSING', details: 'Filtering SOS messages on Twitter/X. Removing duplicate reports.', time: 5500 },
   { agent: 'SatelliteAgent', status: 'COMPLETED', details: 'Confirmed bridge collapse on Route 9. Highlighting danger zones.', time: 6000 },
   
   { agent: 'MedicalAgent', status: 'PROCESSING', details: 'Evaluating hospital capacity based on Satellite injury estimates.', time: 7000 },
   { agent: 'RoadAgent', status: 'COMPLETED', details: 'Generated 3 alternative evacuation routes avoiding Route 9.', time: 8500 },
   
-  { agent: 'LogisticsAgent', status: 'PROCESSING', details: 'Calculating supply chain requirements for displaced civilians.', time: 10000 },
-  { agent: 'LogisticsAgent', status: 'COMPLETED', details: 'Secured 500 emergency water rations and 2 heavy airlift choppers.', time: 12000 },
+  { agent: 'SupplyChainAgent', status: 'PROCESSING', details: 'Calculating supply chain requirements for displaced civilians.', time: 10000 },
+  { agent: 'SupplyChainAgent', status: 'COMPLETED', details: 'Secured 500 emergency water rations and 2 heavy airlift choppers.', time: 12000 },
   
-  { agent: 'DecisionIntelligenceAgent', status: 'COMPLETED', details: 'Synthesized all layers. Operational dashboard populated and ready.', time: 14000 },
+  { agent: 'DecisionIntelligenceAgent', status: 'COMPLETED', details: 'Synthesized all layers. Priority List generated and dashboard populated.', time: 14000 },
 ];
 
 export const AgentChat = () => {

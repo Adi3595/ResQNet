@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { GlassPanel } from '../components/ui/GlassPanel';
-import { ShieldAlert, Activity, HeartPulse, Building2, Cross, Waves, Network } from 'lucide-react';
+import { ShieldAlert, Activity, HeartPulse, Building2, Cross, Waves, Network, Flame, Droplets, ListOrdered } from 'lucide-react';
 import { AgentChat } from '../components/AgentChat';
 
 const ACTIVE_INCIDENTS = [
@@ -14,6 +14,8 @@ const ACTIVE_INCIDENTS = [
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<'map' | 'medical' | 'shelters'>('map');
+  const [showFlood, setShowFlood] = useState(false);
+  const [showFire, setShowFire] = useState(false);
 
   return (
     <div className="h-screen w-screen bg-obsidian text-warm-white overflow-hidden font-sans flex flex-col">
@@ -116,11 +118,53 @@ export default function Dashboard() {
                   ))}
                 </Map>
                 
-                {/* Map Overlay Stats */}
-                <div className="absolute top-6 left-6 z-20 pointer-events-none">
-                  <GlassPanel className="p-4 bg-zinc-900/90 backdrop-blur-xl rounded-xl shadow-lg border-zinc-800">
-                    <h3 className="font-display text-xs text-steel-gray uppercase font-semibold mb-1">Active Crises</h3>
-                    <div className="text-3xl font-bold text-amber-500">3</div>
+                {/* Map Overlays and Priority List */}
+                <div className="absolute top-6 left-6 z-20 flex flex-col space-y-4 pointer-events-none">
+                  {/* Status */}
+                  <GlassPanel className="p-4 bg-zinc-900/90 backdrop-blur-xl rounded-xl shadow-lg border-zinc-800 w-64 pointer-events-auto">
+                    <h3 className="font-display text-xs text-steel-gray uppercase font-semibold mb-3">Map Overlays</h3>
+                    <div className="space-y-2">
+                      <button 
+                        onClick={() => setShowFlood(!showFlood)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-all border ${showFlood ? 'bg-teal-500/20 border-teal-500 text-warm-white' : 'bg-zinc-800 border-zinc-700 text-steel-gray hover:bg-zinc-700'}`}
+                      >
+                        <span className="flex items-center"><Droplets className="w-4 h-4 mr-2 text-teal-400" /> Flood Risk</span>
+                        <div className={`w-8 h-4 rounded-full flex items-center p-0.5 ${showFlood ? 'bg-teal-500' : 'bg-zinc-600'}`}>
+                          <div className={`w-3 h-3 bg-white rounded-full shadow-md transform transition-transform ${showFlood ? 'translate-x-4' : 'translate-x-0'}`} />
+                        </div>
+                      </button>
+                      <button 
+                        onClick={() => setShowFire(!showFire)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-all border ${showFire ? 'bg-rescue-red/20 border-rescue-red text-warm-white' : 'bg-zinc-800 border-zinc-700 text-steel-gray hover:bg-zinc-700'}`}
+                      >
+                        <span className="flex items-center"><Flame className="w-4 h-4 mr-2 text-rescue-red" /> Wildfire Zones</span>
+                        <div className={`w-8 h-4 rounded-full flex items-center p-0.5 ${showFire ? 'bg-rescue-red' : 'bg-zinc-600'}`}>
+                          <div className={`w-3 h-3 bg-white rounded-full shadow-md transform transition-transform ${showFire ? 'translate-x-4' : 'translate-x-0'}`} />
+                        </div>
+                      </button>
+                    </div>
+                  </GlassPanel>
+
+                  {/* Priority List Output */}
+                  <GlassPanel className="p-4 bg-zinc-900/90 backdrop-blur-xl rounded-xl shadow-lg border-zinc-800 w-64 pointer-events-auto">
+                    <h3 className="font-display text-xs text-steel-gray uppercase font-semibold mb-3 flex items-center">
+                      <ListOrdered className="w-4 h-4 mr-2 text-indigo-400" />
+                      Priority Action List
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="bg-zinc-800 p-2 rounded border border-zinc-700">
+                        <span className="text-xs font-bold text-rescue-red block mb-1">Priority 1</span>
+                        <p className="text-xs text-warm-white leading-relaxed">Dispatch airlift to collapsed bridge on Route 9.</p>
+                      </div>
+                      <div className="bg-zinc-800 p-2 rounded border border-zinc-700">
+                        <span className="text-xs font-bold text-amber-500 block mb-1">Priority 2</span>
+                        <p className="text-xs text-warm-white leading-relaxed">Route 500 water rations to Shelter 12.</p>
+                      </div>
+                      <div className="bg-zinc-800 p-2 rounded border border-zinc-700">
+                        <span className="text-xs font-bold text-teal-400 block mb-1">Priority 3</span>
+                        <p className="text-xs text-warm-white leading-relaxed">Alert hospital regarding incoming trauma patients.</p>
+                      </div>
+                    </div>
                   </GlassPanel>
                 </div>
               </motion.div>

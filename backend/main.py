@@ -38,6 +38,21 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(SecurityHeadersMiddleware)
 
+# --- SECURITY: Audit Logging Middleware ---
+import logging
+logger = logging.getLogger("audit_logger")
+logger.setLevel(logging.INFO)
+
+class AuditLoggingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # Log the incoming request details for auditing
+        logger.info(f"AUDIT LOG: User IP {request.client.host} accessed {request.method} {request.url.path}")
+        response = await call_next(request)
+        logger.info(f"AUDIT LOG: Response status {response.status_code} for {request.url.path}")
+        return response
+
+app.add_middleware(AuditLoggingMiddleware)
+
 # --- SECURITY: Strict CORS Configuration ---
 # Allow specific origins in production, fallback to generic for dev
 allowed_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,https://resqnet.vercel.app").split(",")
