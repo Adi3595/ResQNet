@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { GlassPanel } from '../components/ui/GlassPanel';
-import { ShieldAlert, Activity, HeartPulse, Building2, Cross, Waves, Network, Flame, Droplets, ListOrdered, Satellite, ShieldCheck, Map as MapIcon, Users, Package, MessageSquare, AlertTriangle, Zap, Cpu } from 'lucide-react';
+import { ShieldAlert, Activity, HeartPulse, Building2, Cross, Waves, Network, Flame, Droplets, ListOrdered, Satellite, ShieldCheck, Map as MapIcon, Users, Package, MessageSquare, AlertTriangle, Zap, Cpu, Loader2, AlertCircle } from 'lucide-react';
 import { AgentChat } from '../components/AgentChat';
 
 type Incident = {
@@ -21,12 +21,27 @@ export default function Dashboard() {
   const [showFlood, setShowFlood] = useState(false);
   const [showFire, setShowFire] = useState(false);
   const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setLoading(true);
     fetch('http://localhost:8000/api/incidents/')
-      .then(res => res.json())
-      .then(data => setIncidents(data))
-      .catch(err => console.error("Failed to fetch live incidents:", err));
+      .then(res => {
+        if (!res.ok) throw new Error("Telemetry Feed Disconnected");
+        return res.json();
+      })
+      .then(data => {
+        setIncidents(data);
+        setError(null);
+      })
+      .catch(err => {
+        console.error("Failed to fetch live incidents:", err);
+        setError("CRITICAL: Failed to establish secure connection to Neural Swarm Telemetry.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -110,7 +125,45 @@ export default function Dashboard() {
         {/* Center Panel - The View */}
         <div className="flex-1 relative bg-obsidian flex">
           <AnimatePresence mode="wait">
-            {activeView === 'map' && (
+            {loading ? (
+              <motion.div 
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex-1 flex flex-col items-center justify-center bg-obsidian text-steel-gray space-y-6"
+              >
+                <div className="relative">
+                  <div className="w-24 h-24 border-4 border-zinc-800 rounded-full animate-spin"></div>
+                  <div className="w-24 h-24 border-4 border-teal-500 rounded-full animate-spin absolute top-0 left-0 border-t-transparent border-r-transparent border-b-transparent"></div>
+                  <Loader2 className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-teal-500 animate-pulse" />
+                </div>
+                <div className="text-center">
+                  <h2 className="text-xl font-display font-bold text-warm-white mb-2">Establishing Satellite Uplink...</h2>
+                  <p className="text-sm">Connecting to global incident database</p>
+                </div>
+              </motion.div>
+            ) : error ? (
+              <motion.div 
+                key="error"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex-1 flex flex-col items-center justify-center bg-obsidian text-steel-gray space-y-6 p-10"
+              >
+                <AlertCircle className="w-20 h-20 text-rescue-red animate-pulse" />
+                <div className="text-center max-w-lg">
+                  <h2 className="text-2xl font-display font-bold text-rescue-red mb-3">CONNECTION REFUSED</h2>
+                  <p className="text-sm text-warm-white/70 mb-6">{error}</p>
+                  <button 
+                    onClick={() => window.location.reload()}
+                    className="px-6 py-2 bg-rescue-red/10 text-rescue-red border border-rescue-red/20 rounded-md font-medium hover:bg-rescue-red/20 transition-all cursor-pointer"
+                  >
+                    Reboot Terminal
+                  </button>
+                </div>
+              </motion.div>
+            ) : activeView === 'map' && (
               <motion.div 
                 key="map"
                 initial={{ opacity: 0 }}
