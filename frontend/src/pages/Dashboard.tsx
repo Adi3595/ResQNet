@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
