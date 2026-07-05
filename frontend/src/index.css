@@ -1,23 +1,50 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", sans-serif;
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-display: "Orbitron", sans-serif;
+  
+  /* Deep Space Theme */
+  --color-space-950: #040812;
+  --color-space-900: #0a0f1c;
+  --color-space-800: #111827;
+  --color-cyan-glow: #00f0ff;
+  --color-alert-red: #ff3366;
+  --color-warn-orange: #ff8800;
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-white/20 backdrop-blur-lg border border-white/30 shadow-lg;
+  .glass-panel {
+    @apply bg-space-900/50 backdrop-blur-xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
   }
-  .glass-dark {
-    @apply bg-black/40 backdrop-blur-xl border border-gray-700 shadow-2xl;
+  .glass-border-glow {
+    @apply border border-cyan-glow/30 shadow-[0_0_15px_rgba(0,240,255,0.15)];
+  }
+  .text-glow {
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  }
+  .text-glow-red {
+    text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
   }
 }
 
 body {
-  @apply bg-gray-50 text-gray-900;
+  @apply bg-space-950 text-gray-200 antialiased selection:bg-cyan-glow/30 selection:text-white;
   margin: 0;
+  overflow-x: hidden;
 }
 
-.dark body {
-  @apply bg-gray-900 text-gray-100;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-space-800 rounded-full border border-white/5;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-cyan-glow/50;
 }
