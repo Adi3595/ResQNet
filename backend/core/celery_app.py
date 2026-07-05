@@ -20,11 +20,6 @@ celery_app.conf.update(
 
 import asyncio
 from socket_server.server import broadcast_agent_update
-import sys
-import os
-
-# To allow imports from agents package
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from agents.commander import run_multi_agent_workflow
 
 def sync_broadcast(incident_id, agent_name, status, details):

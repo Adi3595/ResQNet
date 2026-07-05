@@ -1,8 +1,4 @@
 from google_agent_adk import Agent, Tool, Task
-import sys
-import os
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from mcp.tools import get_weather, get_hospital_capacity, get_traffic_status, get_shelter_capacity, notify_emergency_contacts
 from database.db import SessionLocal
 from database.models import Incident
