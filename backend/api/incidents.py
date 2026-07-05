@@ -22,8 +22,7 @@ def run_swarm_in_background(incident_id: int, description: str):
 def create_incident(
     incident_in: IncidentCreate, 
     background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db), 
-    current_user = Depends(get_current_user)
+    db: Session = Depends(get_db)
 ):
     incident = Incident(**incident_in.dict())
     db.add(incident)

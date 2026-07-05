@@ -57,7 +57,29 @@ export default function Dashboard() {
           <img src="/logo.png" alt="ResQNet Logo" className="w-6 h-6 object-contain" />
           <h1 className="text-lg font-display font-bold tracking-wide">Operations Control</h1>
         </div>
-        <div className="flex space-x-6">
+        <div className="flex space-x-4 items-center">
+          <button
+            onClick={() => {
+              const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+              fetch(`${apiUrl}/api/incidents/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  type: 'Category 5 Hurricane',
+                  severity: 'Critical',
+                  description: 'Massive hurricane landfall disrupting power grids and flooding coastal regions.',
+                  latitude: 25.7617,
+                  longitude: -80.1918,
+                  status: 'Active'
+                })
+              }).then(() => window.location.reload());
+            }}
+            className="flex items-center space-x-2 text-sm font-bold bg-rescue-red/10 text-rescue-red hover:bg-rescue-red/20 px-4 py-1.5 rounded border border-rescue-red/30 transition-colors cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.2)]"
+          >
+            <Zap className="w-4 h-4" />
+            <span>SIMULATE DISASTER</span>
+          </button>
+          
           <span className="flex items-center space-x-2 text-sm text-steel-gray bg-zinc-800/50 px-3 py-1.5 rounded-full border border-zinc-700">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
