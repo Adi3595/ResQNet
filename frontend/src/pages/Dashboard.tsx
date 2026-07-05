@@ -60,30 +60,7 @@ export default function Dashboard() {
         <div className="flex space-x-4 items-center">
           <button
             onClick={() => {
-              const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-              fetch(`${apiUrl}/api/incidents/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  title: 'Hurricane Alpha',
-                  type: 'Category 5 Hurricane',
-                  severity: 'Critical',
-                  description: 'Massive hurricane landfall disrupting power grids and flooding coastal regions.',
-                  latitude: 25.7617,
-                  longitude: -80.1918,
-                  status: 'Active'
-                })
-              }).then(async res => {
-                if (!res.ok) {
-                  console.error("Failed to simulate disaster:", await res.text());
-                  return null;
-                }
-                return res.json();
-              }).then(newIncident => {
-                if (newIncident) {
-                  setIncidents(prev => [...prev, newIncident]);
-                }
-              });
+              alert("LIVE MAP ENGAGED: Please click anywhere on the global map to trigger a dynamic disaster at that exact location!");
             }}
             className="flex items-center space-x-2 text-sm font-bold bg-rescue-red/10 text-rescue-red hover:bg-rescue-red/20 px-4 py-1.5 rounded border border-rescue-red/30 transition-colors cursor-pointer neon-glow-red"
           >
@@ -208,6 +185,28 @@ export default function Dashboard() {
                 <Map
                   initialViewState={{ longitude: -80.1918, latitude: 25.7617, zoom: 11 }}
                   mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+                  cursor="crosshair"
+                  onClick={(e) => {
+                    const { lng, lat } = e.lngLat;
+                    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+                    fetch(`${apiUrl}/api/incidents/`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        title: 'Dynamic Map Event',
+                        type: 'Category 5 Hurricane',
+                        severity: 'Critical',
+                        description: `Massive hurricane landfall at dynamic map coordinates.`,
+                        latitude: lat,
+                        longitude: lng,
+                        status: 'Active'
+                      })
+                    }).then(res => res.json()).then(newIncident => {
+                      if (newIncident) {
+                        setIncidents(prev => [...prev, newIncident]);
+                      }
+                    });
+                  }}
                 >
                   <NavigationControl position="bottom-right" />
                   
