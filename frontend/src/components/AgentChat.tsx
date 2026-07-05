@@ -136,6 +136,7 @@ export const AgentChat = () => {
           ))}
         </AnimatePresence>
       </div>
+    </div>
     </>
   );
 }
