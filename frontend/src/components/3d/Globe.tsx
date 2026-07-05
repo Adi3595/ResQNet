@@ -16,14 +16,14 @@ export const Globe = () => {
   return (
     <group>
       <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={2} color="#00f0ff" />
-      <directionalLight position={[-10, -10, -5]} intensity={1} color="#ff3366" />
+      <directionalLight position={[10, 10, 5]} intensity={2} color="#38BDF8" />
+      <directionalLight position={[-10, -10, -5]} intensity={1} color="#FEF08A" />
       
       {/* Core glowing sphere */}
       <Sphere ref={sphereRef} args={[2.5, 64, 64]} position={[0, 0, 0]}>
         <MeshDistortMaterial
-          color="#0B1120"
-          emissive="#00f0ff"
+          color="#0f172a"
+          emissive="#38BDF8"
           emissiveIntensity={0.2}
           attach="material"
           distort={0.1}
@@ -35,7 +35,7 @@ export const Globe = () => {
       
       {/* Outer atmosphere halo */}
       <Sphere args={[2.7, 32, 32]} position={[0, 0, 0]}>
-        <meshBasicMaterial color="#00f0ff" transparent opacity={0.05} side={THREE.BackSide} />
+        <meshBasicMaterial color="#38BDF8" transparent opacity={0.05} side={THREE.BackSide} />
       </Sphere>
     </group>
   );

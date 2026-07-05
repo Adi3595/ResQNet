@@ -42,9 +42,9 @@ export const AgentChat = () => {
   }, []);
 
   const getAgentColor = (agent: string) => {
-    if (agent === 'WeatherAgent') return 'text-cyan-glow border-cyan-glow';
-    if (agent === 'CommanderAgent') return 'text-warn-orange border-warn-orange';
-    if (agent === 'RoadAgent') return 'text-alert-red border-alert-red';
+    if (agent === 'WeatherAgent') return 'text-sky-blue border-sky-blue';
+    if (agent === 'CommanderAgent') return 'text-pastel-yellow border-pastel-yellow';
+    if (agent === 'RoadAgent') return 'text-pastel-blue border-pastel-blue';
     return 'text-gray-400 border-gray-600';
   };
 
@@ -54,7 +54,7 @@ export const AgentChat = () => {
       <div className="absolute inset-0 pointer-events-none border border-white/5 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
       
       <div className="p-4 border-b border-white/10 bg-space-900 flex justify-between items-center z-10">
-        <h3 className="font-display font-bold text-sm tracking-widest text-cyan-glow flex items-center">
+        <h3 className="font-display font-bold text-sm tracking-widest text-sky-blue flex items-center">
           <BrainCircuit className="w-4 h-4 mr-2" />
           LIVE TELEMETRY
         </h3>
@@ -83,7 +83,7 @@ export const AgentChat = () => {
               <div className="flex items-center space-x-2 mb-2">
                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-widest
                   ${msg.status === 'COMPLETED' ? 'bg-green-500/20 text-green-400 border border-green-500/50' : 
-                    msg.status === 'PROCESSING' ? 'bg-warn-orange/20 text-warn-orange border border-warn-orange/50 flex items-center' : 
+                    msg.status === 'PROCESSING' ? 'bg-pastel-yellow/20 text-pastel-yellow border border-pastel-yellow/50 flex items-center' : 
                     'bg-space-800 text-gray-400 border border-gray-700'}`}>
                   {msg.status === 'PROCESSING' && <Loader2 className="w-3 h-3 animate-spin mr-1 inline" />}
                   {msg.status}

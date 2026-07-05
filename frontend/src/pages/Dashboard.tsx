@@ -25,14 +25,14 @@ export default function Dashboard() {
         className="h-16 border-b border-white/10 bg-space-900/80 backdrop-blur-xl flex items-center justify-between px-6 z-50 shrink-0"
       >
         <div className="flex items-center space-x-3">
-          <ShieldAlert className="w-6 h-6 text-cyan-glow" />
+          <ShieldAlert className="w-6 h-6 text-sky-blue" />
           <h1 className="text-xl font-display font-bold tracking-widest text-glow">RESQNET // COMMAND</h1>
         </div>
         <div className="flex space-x-6">
-          <span className="flex items-center space-x-2 text-sm text-cyan-glow">
+          <span className="flex items-center space-x-2 text-sm text-sky-blue">
             <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-glow opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-glow"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-blue opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-blue"></span>
             </span>
             <span>SYSTEM ONLINE</span>
           </span>
@@ -50,12 +50,12 @@ export default function Dashboard() {
         >
           <div className="px-6 mb-8 hidden lg:block text-xs font-bold text-gray-500 uppercase tracking-widest">Modules</div>
           
-          <button onClick={() => setActiveTab('map')} className={`w-full flex items-center p-4 lg:px-6 transition-all border-l-2 ${activeTab === 'map' ? 'border-cyan-glow bg-cyan-glow/10 text-cyan-glow' : 'border-transparent text-gray-400 hover:text-white'}`}>
+          <button onClick={() => setActiveTab('map')} className={`w-full flex items-center p-4 lg:px-6 transition-all border-l-2 ${activeTab === 'map' ? 'border-sky-blue bg-sky-blue/10 text-sky-blue' : 'border-transparent text-gray-400 hover:text-white'}`}>
             <Activity className="w-6 h-6 shrink-0" />
             <span className="ml-4 hidden lg:block font-display tracking-wider text-sm">Global Map</span>
           </button>
           
-          <button onClick={() => setActiveTab('agents')} className={`w-full flex items-center p-4 lg:px-6 transition-all border-l-2 ${activeTab === 'agents' ? 'border-cyan-glow bg-cyan-glow/10 text-cyan-glow' : 'border-transparent text-gray-400 hover:text-white'}`}>
+          <button onClick={() => setActiveTab('agents')} className={`w-full flex items-center p-4 lg:px-6 transition-all border-l-2 ${activeTab === 'agents' ? 'border-sky-blue bg-sky-blue/10 text-sky-blue' : 'border-transparent text-gray-400 hover:text-white'}`}>
             <BrainCircuit className="w-6 h-6 shrink-0" />
             <span className="ml-4 hidden lg:block font-display tracking-wider text-sm">Neural Agents</span>
           </button>
@@ -64,9 +64,9 @@ export default function Dashboard() {
           <div className="mt-auto px-6 hidden lg:block w-full">
             <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Active Swarm</div>
             <div className="space-y-3">
-              <div className="flex items-center text-sm text-gray-300"><Waves className="w-4 h-4 mr-2 text-blue-400" /> Weather Agent</div>
-              <div className="flex items-center text-sm text-gray-300"><Cross className="w-4 h-4 mr-2 text-red-400" /> Medical Agent</div>
-              <div className="flex items-center text-sm text-gray-300"><Building2 className="w-4 h-4 mr-2 text-orange-400" /> Infra Agent</div>
+              <div className="flex items-center text-sm text-gray-300"><Waves className="w-4 h-4 mr-2 text-sky-blue" /> Weather Agent</div>
+              <div className="flex items-center text-sm text-gray-300"><Cross className="w-4 h-4 mr-2 text-pastel-blue" /> Medical Agent</div>
+              <div className="flex items-center text-sm text-gray-300"><Building2 className="w-4 h-4 mr-2 text-pastel-yellow" /> Infra Agent</div>
               <div className="flex items-center text-sm text-gray-300"><Satellite className="w-4 h-4 mr-2 text-gray-400" /> Comms Agent</div>
             </div>
           </div>
@@ -90,8 +90,8 @@ export default function Dashboard() {
               {ACTIVE_INCIDENTS.map(inc => (
                 <Marker key={inc.id} longitude={inc.lng} latitude={inc.lat}>
                   <div className="relative flex h-8 w-8 items-center justify-center cursor-pointer group">
-                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${inc.severity === 'Critical' ? 'bg-alert-red' : 'bg-warn-orange'}`}></span>
-                    <span className={`relative inline-flex rounded-full h-4 w-4 ${inc.severity === 'Critical' ? 'bg-alert-red' : 'bg-warn-orange'}`}></span>
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${inc.severity === 'Critical' ? 'bg-pastel-blue' : 'bg-pastel-yellow'}`}></span>
+                    <span className={`relative inline-flex rounded-full h-4 w-4 ${inc.severity === 'Critical' ? 'bg-pastel-blue' : 'bg-pastel-yellow'}`}></span>
                     
                     {/* Tooltip */}
                     <div className="absolute bottom-10 opacity-0 group-hover:opacity-100 transition-opacity bg-space-900 border border-white/10 px-3 py-1 rounded text-xs whitespace-nowrap z-50">
@@ -105,7 +105,7 @@ export default function Dashboard() {
             {/* Map Overlay Stats */}
             <div className="absolute top-6 left-6 z-20 pointer-events-none">
               <GlassPanel className="p-4 bg-space-900/80 backdrop-blur-md">
-                <h3 className="font-display text-sm tracking-widest text-cyan-glow mb-1">TACTICAL OVERVIEW</h3>
+                <h3 className="font-display text-sm tracking-widest text-sky-blue mb-1">TACTICAL OVERVIEW</h3>
                 <div className="text-3xl font-light">3 <span className="text-sm text-gray-400">ACTIVE ZONES</span></div>
               </GlassPanel>
             </div>
@@ -115,7 +115,7 @@ export default function Dashboard() {
           <div className={`absolute inset-0 bg-space-950 p-6 overflow-y-auto transition-opacity duration-500 ${activeTab === 'agents' ? 'opacity-100 z-20' : 'opacity-0 z-0 pointer-events-none'}`}>
             <div className="max-w-4xl mx-auto h-full flex flex-col">
               <div className="flex items-center space-x-3 mb-8 shrink-0">
-                <BrainCircuit className="w-8 h-8 text-cyan-glow" />
+                <BrainCircuit className="w-8 h-8 text-sky-blue" />
                 <h2 className="text-3xl font-display font-bold">Neural Reasoning Stream</h2>
               </div>
               
