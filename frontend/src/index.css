@@ -4,51 +4,65 @@
   --font-sans: "Inter", sans-serif;
   --font-display: "IBM Plex Sans", sans-serif;
   
-  /* Humanitarian Professional Theme */
-  --color-navy-950: #050B14;
-  --color-navy-900: #0A1128;
-  --color-storm-800: #1C2A43;
-  --color-storm-700: #2C3E5D;
+  /* Obsidian Teal Premium Theme */
+  --color-obsidian: #09090b;
+  --color-zinc-900: #18181b;
+  --color-zinc-800: #27272a;
+  --color-slate-800: #1e293b;
+  --color-slate-700: #334155;
   
-  --color-emergency-orange: #FF6B35;
-  --color-rescue-red: #E63946;
-  --color-medical-cyan: #00B4D8;
-  --color-steel-gray: #64748B;
-  --color-warm-white: #F8F9FA;
+  --color-teal-500: #14b8a6;
+  --color-teal-400: #2dd4bf;
+  --color-indigo-500: #6366f1;
+  
+  --color-rescue-red: #ef4444;
+  --color-amber-500: #f59e0b;
+  --color-steel-gray: #94a3b8;
+  --color-warm-white: #f8fafc;
 }
 
 @layer utilities {
   .solid-panel {
-    @apply bg-storm-800 border border-storm-700 shadow-md;
+    @apply bg-zinc-900 border border-zinc-800 shadow-lg;
   }
   .card-border {
-    @apply border border-storm-700/50 shadow-sm rounded-lg bg-navy-900/80 backdrop-blur-md;
+    @apply border border-zinc-800/80 shadow-md rounded-xl bg-zinc-900/90 backdrop-blur-xl transition-all duration-300;
+  }
+  .card-border:hover {
+    @apply border-zinc-700 shadow-xl;
   }
   .status-active {
-    @apply border border-emergency-orange text-emergency-orange bg-emergency-orange/10;
+    @apply border border-amber-500/50 text-amber-500 bg-amber-500/10;
   }
   .status-medical {
-    @apply border border-medical-cyan text-medical-cyan bg-medical-cyan/10;
+    @apply border border-teal-500/50 text-teal-400 bg-teal-500/10;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-warm-white to-steel-gray;
+  }
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-indigo-500;
   }
 }
 
 body {
-  @apply bg-navy-950 text-warm-white antialiased selection:bg-medical-cyan/30 selection:text-white;
+  @apply bg-obsidian text-warm-white antialiased selection:bg-teal-500/30 selection:text-white;
   margin: 0;
   overflow-x: hidden;
 }
 
-/* Custom Scrollbar - Professional */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-storm-700 rounded-full border border-navy-950;
+  @apply bg-zinc-800 rounded-full border-2 border-obsidian;
 }
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-steel-gray;
+  @apply bg-slate-700;
 }

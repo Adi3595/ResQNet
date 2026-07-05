@@ -19,7 +19,7 @@ export const GlassPanel: React.FC<GlassPanelProps> = ({ children, className, glo
     <motion.div
       className={cn(
         'card-border p-6 relative overflow-hidden transition-colors',
-        glow && 'border-medical-cyan/30 shadow-[0_0_15px_rgba(0,180,216,0.1)]',
+        glow && 'border-teal-500/30 shadow-[0_0_15px_rgba(20,184,166,0.15)]',
         className
       )}
       initial={{ opacity: 0, y: 10 }}
