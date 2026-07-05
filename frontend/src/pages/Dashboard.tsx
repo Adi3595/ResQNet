@@ -6,16 +6,28 @@ import { GlassPanel } from '../components/ui/GlassPanel';
 import { ShieldAlert, Activity, HeartPulse, Building2, Cross, Waves, Network, Flame, Droplets, ListOrdered, Satellite, ShieldCheck, Map as MapIcon, Users, Package, MessageSquare, AlertTriangle, Zap, Cpu } from 'lucide-react';
 import { AgentChat } from '../components/AgentChat';
 
-const ACTIVE_INCIDENTS = [
-  { id: 1, lat: 37.7749, lng: -122.4194, type: 'Earthquake', severity: 'High' },
-  { id: 2, lat: 34.0522, lng: -118.2437, type: 'Wildfire', severity: 'Critical' },
-  { id: 3, lat: 29.7604, lng: -95.3698, type: 'Flood', severity: 'Medium' }
-];
+type Incident = {
+  id: number;
+  lat: number;
+  lng: number;
+  type: string;
+  severity: string;
+  latitude: number;
+  longitude: number;
+};
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<'map' | 'medical' | 'shelters'>('map');
   const [showFlood, setShowFlood] = useState(false);
   const [showFire, setShowFire] = useState(false);
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/incidents/')
+      .then(res => res.json())
+      .then(data => setIncidents(data))
+      .catch(err => console.error("Failed to fetch live incidents:", err));
+  }, []);
 
   return (
     <div className="h-screen w-screen bg-obsidian text-warm-white overflow-hidden font-sans flex flex-col">
@@ -112,8 +124,8 @@ export default function Dashboard() {
                 >
                   <NavigationControl position="bottom-right" />
                   
-                  {ACTIVE_INCIDENTS.map(inc => (
-                    <Marker key={inc.id} longitude={inc.lng} latitude={inc.lat}>
+                  {incidents.map(inc => (
+                    <Marker key={inc.id} longitude={inc.longitude || inc.lng} latitude={inc.latitude || inc.lat}>
                       <div className="relative flex h-8 w-8 items-center justify-center cursor-pointer group">
                         <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 ${inc.severity === 'Critical' ? 'bg-rescue-red' : 'bg-amber-500'}`}></span>
                         <span className={`relative inline-flex rounded-full h-4 w-4 ${inc.severity === 'Critical' ? 'bg-rescue-red' : 'bg-amber-500'} shadow-lg border-2 border-obsidian`}></span>

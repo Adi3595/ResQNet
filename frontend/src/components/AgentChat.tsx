@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Network, Loader2, CheckCircle2 } from 'lucide-react';
 
@@ -10,45 +11,35 @@ type Message = {
   timestamp: string;
 };
 
-// Operational mock stream matching the exact Kaggle rubric diagram
-const mockStream = [
-  { agent: 'CommanderAgent', status: 'STARTED', details: 'Parsing raw incident report. Initializing delegation protocols.', time: 1000 },
-  { agent: 'CommanderAgent', status: 'COMPLETED', details: 'Delegating sector analysis to Satellite, Weather, and Infrastructure agents.', time: 3000 },
-  
-  { agent: 'SatelliteAgent', status: 'PROCESSING', details: 'Analyzing structural integrity of major bridges via optical feed.', time: 4000 },
-  { agent: 'RiskPredictionAgent', status: 'PROCESSING', details: 'Predicting secondary landslide probabilities in Sector 4.', time: 4500 },
-  { agent: 'SocialMediaAgent', status: 'PROCESSING', details: 'Filtering SOS messages on Twitter/X. Removing duplicate reports.', time: 5500 },
-  { agent: 'SatelliteAgent', status: 'COMPLETED', details: 'Confirmed bridge collapse on Route 9. Highlighting danger zones.', time: 6000 },
-  
-  { agent: 'MedicalAgent', status: 'PROCESSING', details: 'Evaluating hospital capacity based on Satellite injury estimates.', time: 7000 },
-  { agent: 'RoadAgent', status: 'COMPLETED', details: 'Generated 3 alternative evacuation routes avoiding Route 9.', time: 8500 },
-  
-  { agent: 'SupplyChainAgent', status: 'PROCESSING', details: 'Calculating supply chain requirements for displaced civilians.', time: 10000 },
-  { agent: 'SupplyChainAgent', status: 'COMPLETED', details: 'Secured 500 emergency water rations and 2 heavy airlift choppers.', time: 12000 },
-  
-  { agent: 'DecisionIntelligenceAgent', status: 'COMPLETED', details: 'Synthesized all layers. Priority List generated and dashboard populated.', time: 14000 },
-];
-
 export const AgentChat = () => {
   const [messages, setMessages] = useState<Message[]>([
-    { id: '0', agent: 'System', status: 'STARTED', details: 'Initializing operational link...', timestamp: new Date().toLocaleTimeString() }
+    { id: '0', agent: 'System', status: 'STARTED', details: 'Listening for Neural Swarm telemetry on secure socket...', timestamp: new Date().toLocaleTimeString() }
   ]);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    let timeouts: NodeJS.Timeout[] = [];
-    mockStream.forEach((msg, idx) => {
-      const t = setTimeout(() => {
-        setMessages(prev => [...prev, {
-          id: idx.toString(),
-          agent: msg.agent,
-          status: msg.status as any,
-          details: msg.details,
-          timestamp: new Date().toLocaleTimeString()
-        }]);
-      }, msg.time);
-      timeouts.push(t);
+    // Connect to FastAPI Socket.IO server
+    socketRef.current = io('http://localhost:8000', {
+      path: '/socket.io'
     });
-    return () => timeouts.forEach(clearTimeout);
+
+    socketRef.current.on('connect', () => {
+      setMessages(prev => [...prev, { id: Date.now().toString(), agent: 'System', status: 'COMPLETED', details: 'Socket connected. Awaiting mission parameters.', timestamp: new Date().toLocaleTimeString() }]);
+    });
+
+    socketRef.current.on('agent_update', (data: any) => {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString() + Math.random(),
+        agent: data.agent,
+        status: data.status,
+        details: data.message,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+    });
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
   }, []);
 
   const getAgentColor = (agent: string) => {

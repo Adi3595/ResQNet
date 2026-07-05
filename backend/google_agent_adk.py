@@ -3,6 +3,7 @@ import asyncio
 from google import genai
 from google.genai import types
 from socket_server.server import broadcast_agent_update
+import mcp_tools
 
 class ResQNetAgent:
     def __init__(self, name: str, role: str, model: str = "gemini-2.5-flash"):
@@ -43,7 +44,17 @@ class ResQNetAgent:
                 lambda: self.client.models.generate_content(
                     model=self.model, 
                     contents=prompt,
-                    config=types.GenerateContentConfig(temperature=0.2)
+                    config=types.GenerateContentConfig(
+                        temperature=0.2,
+                        tools=[
+                            mcp_tools.get_routing_info,
+                            mcp_tools.get_weather_forecast,
+                            mcp_tools.query_hospital_beds,
+                            mcp_tools.query_emergency_database,
+                            mcp_tools.analyze_satellite_imagery,
+                            mcp_tools.dispatch_emergency_notification
+                        ]
+                    )
                 )
             )
             
