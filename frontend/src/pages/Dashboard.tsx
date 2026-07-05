@@ -24,7 +24,7 @@ export default function Dashboard() {
         className="h-16 border-b border-zinc-800 bg-zinc-900/90 backdrop-blur-md flex items-center justify-between px-6 z-50 shrink-0 shadow-sm"
       >
         <div className="flex items-center space-x-3">
-          <ShieldAlert className="w-6 h-6 text-teal-500" />
+          <img src="/logo.png" alt="ResQNet Logo" className="w-6 h-6 object-contain" />
           <h1 className="text-lg font-display font-bold tracking-wide">Operations Control</h1>
         </div>
         <div className="flex space-x-6">

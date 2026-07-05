@@ -35,7 +35,7 @@ export default function LandingPage({ onLaunch }: { onLaunch: () => void }) {
       <nav className="fixed top-0 w-full z-50 bg-obsidian/80 backdrop-blur-md border-b border-zinc-800">
         <div className="container mx-auto px-6 h-16 flex justify-between items-center">
           <div className="flex items-center space-x-3">
-            <ShieldAlert className="w-7 h-7 text-teal-500" />
+            <img src="/logo.png" alt="ResQNet Logo" className="w-7 h-7 object-contain" />
             <h1 className="text-xl font-display font-bold tracking-tight">ResQNet</h1>
           </div>
           <button 
@@ -178,7 +178,7 @@ export default function LandingPage({ onLaunch }: { onLaunch: () => void }) {
       <footer className="relative z-10 border-t border-zinc-800 bg-obsidian py-10">
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-steel-gray">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
-            <ShieldAlert className="w-5 h-5 text-teal-500" />
+            <img src="/logo.png" alt="ResQNet Logo" className="w-5 h-5 object-contain" />
             <span className="font-display font-semibold text-warm-white">ResQNet</span>
           </div>
           <div>© 2026 ResQNet Operations. All systems normal.</div>
