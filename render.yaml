@@ -54,36 +54,4 @@ services:
       - key: GEMINI_API_KEY
         sync: false # You must set this manually in the Render dashboard!
 
-  # 4. Celery Background Worker
-  - type: worker
-    name: resqnet-celery
-    env: docker
-    dockerContext: ./backend
-    dockerfilePath: ./backend/Dockerfile
-    dockerCommand: celery -A core.celery_app worker --loglevel=info
-    plan: free
-    envVars:
-      - key: DATABASE_URL
-        fromService:
-          type: pserv
-          name: resqnet-db
-          envVarKey: DATABASE_URL
-      - key: REDIS_URL
-        fromService:
-          type: pserv
-          name: resqnet-redis
-          envVarKey: REDIS_URL
-      - key: CELERY_BROKER_URL
-        fromService:
-          type: pserv
-          name: resqnet-redis
-          envVarKey: REDIS_URL
-      - key: CELERY_RESULT_BACKEND
-        fromService:
-          type: pserv
-          name: resqnet-redis
-          envVarKey: REDIS_URL
-      - key: SECRET_KEY
-        generateValue: true
-      - key: GEMINI_API_KEY
-        sync: false # You must set this manually in the Render dashboard!
+
