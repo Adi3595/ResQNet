@@ -17,6 +17,8 @@ class ResQNetAgent:
 
     async def execute(self, incident_id: int, context: str):
         if not self.client:
+            if self.name == "DecisionIntelligenceAgent":
+                mcp_tools.dispatch_emergency_notification("SYSTEM ERROR: GEMINI_API_KEY is missing in the Render environment variables! Add it in the Render Dashboard.", ["ntfy.sh/resqnet_alerts"])
             await broadcast_agent_update(incident_id, self.name, "ERROR", "GEMINI_API_KEY not configured.")
             return "Error: API Key missing."
 
@@ -79,7 +81,10 @@ class ResQNetAgent:
             await broadcast_agent_update(incident_id, self.name, "COMPLETED", result)
             return result
         except Exception as e:
-            await broadcast_agent_update(incident_id, self.name, "ERROR", f"Agent failure: {str(e)}")
+            error_msg = f"Agent failure: {str(e)}"
+            if self.name == "DecisionIntelligenceAgent":
+                mcp_tools.dispatch_emergency_notification(f"CRITICAL SYSTEM ERROR: {error_msg}", ["ntfy.sh/resqnet_alerts"])
+            await broadcast_agent_update(incident_id, self.name, "ERROR", error_msg)
             return f"Error: {str(e)}"
 
 class SwarmOrchestrator:
