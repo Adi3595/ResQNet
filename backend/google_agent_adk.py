@@ -22,7 +22,7 @@ class ResQNetAgent:
         await broadcast_agent_update(incident_id, self.name, "STARTED", f"Initializing {self.role} protocols...")
         await asyncio.sleep(1) # Visual pacing
         
-        prompt = f"You are the {self.name} for ResQNet. Your role is: {self.role}.\n\nCurrent Incident Context: {context}\n\nProvide a brief, tactical assessment (max 3 sentences) of the situation based on your specific role."
+        prompt = f"You are the {self.name} for ResQNet. Your role is: {self.role}.\n\nCurrent Context: {context}\n\nProvide a brief, tactical assessment (max 3 sentences) of the situation based on your specific role."
         
         await broadcast_agent_update(incident_id, self.name, "PROCESSING", "Analyzing neural telemetry...")
         
@@ -48,45 +48,46 @@ class ResQNetAgent:
 class SwarmOrchestrator:
     def __init__(self):
         self.agents = [
-            ResQNetAgent("WeatherAgent", "Analyze weather patterns and predict storm paths."),
+            ResQNetAgent("CommanderAgent", "Coordinator. Parse the raw incident report and define the primary emergency zones and delegation instructions."),
             ResQNetAgent("SatelliteAgent", "Analyze satellite imagery for collapsed infrastructure."),
+            ResQNetAgent("WeatherAgent", "Analyze weather patterns and predict storm paths."),
             ResQNetAgent("InfrastructureAgent", "Monitor grid stability, water systems, and comms."),
+            ResQNetAgent("CommunicationAgent", "Detect SOS signals, process public communications, and filter noise."),
             ResQNetAgent("RoadAgent", "Detect blocked routes and generate evacuation paths."),
-            ResQNetAgent("MedicalAgent", "Monitor hospital capacity, ambulances, and blood supply."),
             ResQNetAgent("ShelterAgent", "Track shelter occupancy, food, and water."),
-            ResQNetAgent("SupplyChainAgent", "Predict shortages and coordinate rescue equipment."),
+            ResQNetAgent("MedicalAgent", "Monitor hospital capacity, ambulances, and blood supply."),
             ResQNetAgent("VolunteerAgent", "Match civilian volunteers to safe, skill-based tasks."),
-            ResQNetAgent("SocialMediaAgent", "Detect SOS signals from public feeds and filter noise."),
-            ResQNetAgent("RiskPredictionAgent", "Predict secondary disasters like landslides or disease."),
-            ResQNetAgent("CommanderAgent", "Synthesize all agent reports into a final rescue strategy."),
-            ResQNetAgent("DecisionIntelligenceAgent", "Allocate final resources based on commander strategy.")
+            ResQNetAgent("LogisticsAgent", "Predict shortages and coordinate supply chain for rescue equipment."),
+            ResQNetAgent("DecisionIntelligenceAgent", "Synthesize all data into the final tactical dashboard output.")
         ]
         
     async def process_incident(self, incident_id: int, initial_context: str):
-        # We process in logical waves to build context
-        wave_1_context = initial_context
-        
-        # Wave 1: Data Gatherers
-        gatherers = ["WeatherAgent", "SatelliteAgent", "SocialMediaAgent"]
-        gather_results = await asyncio.gather(*[a.execute(incident_id, wave_1_context) for a in self.agents if a.name in gatherers])
-        
-        # Wave 2: Analysts
-        wave_2_context = initial_context + "\nData Gathered:\n" + "\n".join(gather_results)
-        analysts = ["InfrastructureAgent", "RoadAgent", "RiskPredictionAgent"]
-        analyst_results = await asyncio.gather(*[a.execute(incident_id, wave_2_context) for a in self.agents if a.name in analysts])
-        
-        # Wave 3: Resource Managers
-        wave_3_context = wave_2_context + "\nAnalysis:\n" + "\n".join(analyst_results)
-        managers = ["MedicalAgent", "ShelterAgent", "SupplyChainAgent", "VolunteerAgent"]
-        manager_results = await asyncio.gather(*[a.execute(incident_id, wave_3_context) for a in self.agents if a.name in managers])
-        
-        # Wave 4: Command and Decision
-        final_context = wave_3_context + "\nResource Status:\n" + "\n".join(manager_results)
-        
+        # 1. Commander Agent processes raw report
         commander = next(a for a in self.agents if a.name == "CommanderAgent")
-        cmd_result = await commander.execute(incident_id, final_context)
+        cmd_result = await commander.execute(incident_id, f"Raw Incident Report:\n{initial_context}")
         
+        base_context = f"Incident Report:\n{initial_context}\n\nCommander Delegation:\n{cmd_result}"
+        
+        # 2. Layer 1: Assessors
+        layer_1 = ["SatelliteAgent", "WeatherAgent", "InfrastructureAgent", "CommunicationAgent"]
+        l1_results = await asyncio.gather(*[a.execute(incident_id, base_context) for a in self.agents if a.name in layer_1])
+        
+        layer_1_context = base_context + "\n\nLayer 1 Findings:\n" + "\n".join(l1_results)
+        
+        # 3. Layer 2: Responders
+        layer_2 = ["RoadAgent", "ShelterAgent", "MedicalAgent", "VolunteerAgent"]
+        l2_results = await asyncio.gather(*[a.execute(incident_id, layer_1_context) for a in self.agents if a.name in layer_2])
+        
+        layer_2_context = layer_1_context + "\n\nLayer 2 Resource Needs:\n" + "\n".join(l2_results)
+        
+        # 4. Layer 3: Logistics
+        logistics = next(a for a in self.agents if a.name == "LogisticsAgent")
+        log_result = await logistics.execute(incident_id, layer_2_context)
+        
+        final_context = layer_2_context + "\n\nLogistics Plan:\n" + log_result
+        
+        # 5. Final Node: Decision Intelligence
         decision = next(a for a in self.agents if a.name == "DecisionIntelligenceAgent")
-        dec_result = await decision.execute(incident_id, cmd_result)
+        dec_result = await decision.execute(incident_id, final_context)
         
         return dec_result

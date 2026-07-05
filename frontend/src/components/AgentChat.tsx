@@ -10,13 +10,22 @@ type Message = {
   timestamp: string;
 };
 
-// Operational mock stream
+// Operational mock stream matching the new hierarchical diagram
 const mockStream = [
-  { agent: 'WeatherAgent', status: 'STARTED', details: 'Connecting to NOAA Satellite MCP...', time: 2000 },
-  { agent: 'WeatherAgent', status: 'PROCESSING', details: 'Analyzing cyclonic pressure drops over sector 7G.', time: 4000 },
-  { agent: 'WeatherAgent', status: 'COMPLETED', details: 'Category 4 Hurricane trajectory confirmed. Evacuation recommended.', time: 6000 },
-  { agent: 'CommanderAgent', status: 'PROCESSING', details: 'Synthesizing weather data. Tasking Medical and Road agents.', time: 7000 },
-  { agent: 'RoadAgent', status: 'STARTED', details: 'Querying live traffic data...', time: 8000 },
+  { agent: 'CommanderAgent', status: 'STARTED', details: 'Parsing raw incident report. Initializing delegation protocols.', time: 1000 },
+  { agent: 'CommanderAgent', status: 'COMPLETED', details: 'Delegating sector analysis to Satellite, Weather, and Infrastructure agents.', time: 3000 },
+  
+  { agent: 'SatelliteAgent', status: 'PROCESSING', details: 'Analyzing structural integrity of major bridges via optical feed.', time: 4000 },
+  { agent: 'WeatherAgent', status: 'PROCESSING', details: 'Calculating cyclonic pressure drop vectors over Sector 4.', time: 4500 },
+  { agent: 'SatelliteAgent', status: 'COMPLETED', details: 'Confirmed bridge collapse on Route 9. Highlighting danger zones.', time: 6000 },
+  
+  { agent: 'MedicalAgent', status: 'PROCESSING', details: 'Evaluating hospital capacity based on Satellite injury estimates.', time: 7000 },
+  { agent: 'RoadAgent', status: 'COMPLETED', details: 'Generated 3 alternative evacuation routes avoiding Route 9.', time: 8500 },
+  
+  { agent: 'LogisticsAgent', status: 'PROCESSING', details: 'Calculating supply chain requirements for displaced civilians.', time: 10000 },
+  { agent: 'LogisticsAgent', status: 'COMPLETED', details: 'Secured 500 emergency water rations and 2 heavy airlift choppers.', time: 12000 },
+  
+  { agent: 'DecisionIntelligenceAgent', status: 'COMPLETED', details: 'Synthesized all layers. Operational dashboard populated and ready.', time: 14000 },
 ];
 
 export const AgentChat = () => {
