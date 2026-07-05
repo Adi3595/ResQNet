@@ -1,0 +1,89 @@
+services:
+  # 1. PostgreSQL Database
+  - type: pserv
+    name: resqnet-db
+    env: docker
+    plan: free
+    dockerCommand: postgres:15
+    envVars:
+      - key: POSTGRES_USER
+        value: resqnet
+      - key: POSTGRES_PASSWORD
+        generateValue: true
+      - key: POSTGRES_DB
+        value: resqnet
+
+  # 2. Redis Cache & Message Broker
+  - type: pserv
+    name: resqnet-redis
+    env: docker
+    plan: free
+    dockerCommand: redis:7
+
+  # 3. FastAPI Web Service
+  - type: web
+    name: resqnet-backend
+    env: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromService:
+          type: pserv
+          name: resqnet-db
+          envVarKey: DATABASE_URL
+      - key: REDIS_URL
+        fromService:
+          type: pserv
+          name: resqnet-redis
+          envVarKey: REDIS_URL
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: pserv
+          name: resqnet-redis
+          envVarKey: REDIS_URL
+      - key: CELERY_RESULT_BACKEND
+        fromService:
+          type: pserv
+          name: resqnet-redis
+          envVarKey: REDIS_URL
+      - key: SECRET_KEY
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false # You must set this manually in the Render dashboard!
+
+  # 4. Celery Background Worker
+  - type: worker
+    name: resqnet-celery
+    env: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    dockerCommand: celery -A core.celery_app worker --loglevel=info
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromService:
+          type: pserv
+          name: resqnet-db
+          envVarKey: DATABASE_URL
+      - key: REDIS_URL
+        fromService:
+          type: pserv
+          name: resqnet-redis
+          envVarKey: REDIS_URL
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: pserv
+          name: resqnet-redis
+          envVarKey: REDIS_URL
+      - key: CELERY_RESULT_BACKEND
+        fromService:
+          type: pserv
+          name: resqnet-redis
+          envVarKey: REDIS_URL
+      - key: SECRET_KEY
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false # You must set this manually in the Render dashboard!
